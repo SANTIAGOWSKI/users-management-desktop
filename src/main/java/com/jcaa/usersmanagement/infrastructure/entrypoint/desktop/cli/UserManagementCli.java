@@ -11,6 +11,13 @@ import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.cli.io.Console
 import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.cli.io.UserResponsePrinter;
 import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.cli.menu.MenuOption;
 import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.controller.UserController;
+import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.cli.handler.CreateStudentHandler;
+import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.cli.handler.DeleteStudentHandler;
+import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.cli.handler.FindStudentByIdHandler;
+import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.cli.handler.ListStudentsHandler;
+import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.cli.handler.UpdateStudentHandler;
+import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.cli.io.StudentResponsePrinter;
+import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.controller.StudentController;
 import jakarta.validation.ConstraintViolationException;
 import java.util.Map;
 import java.util.Optional;
@@ -28,12 +35,14 @@ public final class UserManagementCli {
   private static final String MENU_BORDER = "  ==========================================";
 
   private final UserController userController;
+  private final StudentController studentController;
   private final ConsoleIO console;
 
   public void start() {
     console.println(BANNER);
     final UserResponsePrinter printer = new UserResponsePrinter(console);
-    runLoop(buildHandlers(printer));
+    final StudentResponsePrinter studentPrinter = new StudentResponsePrinter(console);
+    runLoop(buildHandlers(printer, studentPrinter));
   }
 
   private void runLoop(final Map<MenuOption, OperationHandler> handlers) {
@@ -67,14 +76,28 @@ public final class UserManagementCli {
     }
   }
 
-  private Map<MenuOption, OperationHandler> buildHandlers(final UserResponsePrinter printer) {
-    return Map.of(
-        MenuOption.LIST_USERS,  new ListUsersHandler(userController, printer),
-        MenuOption.FIND_USER,   new FindUserByIdHandler(userController, console, printer),
-        MenuOption.CREATE_USER, new CreateUserHandler(userController, console, printer),
-        MenuOption.UPDATE_USER, new UpdateUserHandler(userController, console, printer),
-        MenuOption.DELETE_USER, new DeleteUserHandler(userController, console),
-        MenuOption.LOGIN,       new LoginHandler(userController, console, printer));
+  private Map<MenuOption, OperationHandler> buildHandlers(
+      final UserResponsePrinter printer, final StudentResponsePrinter studentPrinter) {
+    return Map.ofEntries(
+        Map.entry(MenuOption.LIST_USERS, new ListUsersHandler(userController, printer)),
+        Map.entry(MenuOption.FIND_USER, new FindUserByIdHandler(userController, console, printer)),
+        Map.entry(MenuOption.CREATE_USER, new CreateUserHandler(userController, console, printer)),
+        Map.entry(MenuOption.UPDATE_USER, new UpdateUserHandler(userController, console, printer)),
+        Map.entry(MenuOption.DELETE_USER, new DeleteUserHandler(userController, console)),
+        Map.entry(MenuOption.LOGIN, new LoginHandler(userController, console, printer)),
+        Map.entry(
+            MenuOption.LIST_STUDENTS, new ListStudentsHandler(studentController, studentPrinter)),
+        Map.entry(
+            MenuOption.FIND_STUDENT,
+            new FindStudentByIdHandler(studentController, console, studentPrinter)),
+        Map.entry(
+            MenuOption.CREATE_STUDENT,
+            new CreateStudentHandler(studentController, console, studentPrinter)),
+        Map.entry(
+            MenuOption.UPDATE_STUDENT,
+            new UpdateStudentHandler(studentController, console, studentPrinter)),
+        Map.entry(
+            MenuOption.DELETE_STUDENT, new DeleteStudentHandler(studentController, console)));
   }
 
   private void printMenu() {
