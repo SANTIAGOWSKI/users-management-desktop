@@ -1,6 +1,7 @@
 package com.jcaa.usersmanagement.application.service.mapper;
 
 import com.jcaa.usersmanagement.application.service.dto.command.CreateStudentCommand;
+import com.jcaa.usersmanagement.application.service.dto.command.DeleteStudentCommand;
 import com.jcaa.usersmanagement.application.service.dto.command.UpdateStudentCommand;
 import com.jcaa.usersmanagement.application.service.dto.query.GetStudentByIdQuery;
 import com.jcaa.usersmanagement.domain.model.StudentModel;
@@ -28,5 +29,9 @@ public class StudentApplicationMapper {
 
   public StudentId fromGetStudentByIdQueryToStudentId(final GetStudentByIdQuery query) {
     return new StudentId(query.id());
+  }
+
+  public StudentId fromDeleteCommandToStudentId(final DeleteStudentCommand command) {
+    return new StudentId(command.id());
   }
 }

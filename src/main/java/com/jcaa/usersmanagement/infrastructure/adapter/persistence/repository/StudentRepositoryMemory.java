@@ -1,5 +1,6 @@
 package com.jcaa.usersmanagement.infrastructure.adapter.persistence.repository;
 
+import com.jcaa.usersmanagement.application.port.out.DeleteStudentPort;
 import com.jcaa.usersmanagement.application.port.out.GetStudentByIdPort;
 import com.jcaa.usersmanagement.application.port.out.SaveStudentPort;
 import com.jcaa.usersmanagement.application.port.out.UpdateStudentPort;
@@ -10,7 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public final class StudentRepositoryMemory
-    implements SaveStudentPort, GetStudentByIdPort, UpdateStudentPort {
+    implements SaveStudentPort, GetStudentByIdPort, UpdateStudentPort, DeleteStudentPort {
 
   private final Map<StudentId, StudentModel> students = new LinkedHashMap<>();
 
@@ -29,5 +30,10 @@ public final class StudentRepositoryMemory
   public StudentModel update(final StudentModel student) {
     students.put(student.getId(), student);
     return student;
+  }
+
+  @Override
+  public void delete(final StudentId studentId) {
+    students.remove(studentId);
   }
 }
