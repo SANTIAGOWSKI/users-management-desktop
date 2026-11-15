@@ -20,6 +20,16 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Tabla de estudiantes (entidad del CEA: Ejercicio 16 - Examenes academicos)
+-- Nota: "group" es palabra reservada en MySQL, por eso la columna se llama group_name.
+CREATE TABLE IF NOT EXISTS students (
+    id          VARCHAR(36)  NOT NULL PRIMARY KEY,
+    name        VARCHAR(100) NOT NULL,
+    group_name  VARCHAR(50)  NOT NULL,
+    created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Usuario administrador inicial (password: Admin1234!)
 INSERT INTO users (id, name, email, password, role, status)
 VALUES (
