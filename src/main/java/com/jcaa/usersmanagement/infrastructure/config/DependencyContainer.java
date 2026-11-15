@@ -27,7 +27,7 @@ import com.jcaa.usersmanagement.infrastructure.adapter.email.JavaMailEmailSender
 import com.jcaa.usersmanagement.infrastructure.adapter.email.SmtpConfig;
 import com.jcaa.usersmanagement.infrastructure.adapter.persistence.config.DatabaseConfig;
 import com.jcaa.usersmanagement.infrastructure.adapter.persistence.config.DatabaseConnectionFactory;
-import com.jcaa.usersmanagement.infrastructure.adapter.persistence.repository.StudentRepositoryMemory;
+import com.jcaa.usersmanagement.infrastructure.adapter.persistence.repository.StudentRepositoryMySQL;
 import com.jcaa.usersmanagement.infrastructure.adapter.persistence.repository.UserRepositoryMySQL;
 import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.controller.StudentController;
 import com.jcaa.usersmanagement.infrastructure.entrypoint.desktop.controller.UserController;
@@ -76,7 +76,7 @@ public final class DependencyContainer {
     final GetAllUsersUseCase getAllUsersUseCase = new GetAllUsersService(userRepository);
     final LoginUseCase loginUseCase = new LoginService(userRepository, validator);
 
-    final StudentRepositoryMemory studentRepository = new StudentRepositoryMemory();
+    final StudentRepositoryMySQL studentRepository = new StudentRepositoryMySQL(connection);
     final CreateStudentUseCase createStudentUseCase =
         new CreateStudentService(studentRepository, studentRepository, validator);
     final UpdateStudentUseCase updateStudentUseCase =
